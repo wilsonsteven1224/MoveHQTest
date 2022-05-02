@@ -1,0 +1,39 @@
+version: '3'
+services:
+    frontend:
+        build:
+            context: ./client
+        working_dir: /app
+        tty: true
+        volumes:
+            - ./client:/app
+        command: "npm run dev"
+        ports:
+            - "8000:8000"
+
+    backend:
+        build:
+            context: ./
+        working_dir: /app
+        tty: true
+        volumes:
+            - ./:/app
+        command: "php artisan serve --host=0.0.0.0 --port=8080"
+        #command: "composer create-project laravel/laravel laravel-vue --prefer-dist"
+        ports:
+            - "8080:8080"
+
+    mysql:
+        image: mysql:5.7.22
+        container_name: mysql
+        restart: unless-stopped
+        tty: true
+        ports:
+            - "4306:3306"
+        volumes:
+            - ./db/etc/mysql:/var/lib/mysql
+        environment:
+            MYSQL_DATABASE: mydb
+            MYSQL_USER: root
+            MYSQL_PASSWORD: root
+            MYSQL_ROOT_PASSWORD: root
