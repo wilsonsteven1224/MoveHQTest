@@ -32,6 +32,7 @@ password: 1111
 
 ```
 $ docker-compose exec backend bash
+# php artisan migrate
 # php artisan db:seed
 ```
 The application can now be accessed at
