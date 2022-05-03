@@ -7,7 +7,7 @@ services:
         tty: true
         volumes:
             - ./client:/app
-        command: "npm run dev"
+        command: "npm run start"
         ports:
             - "8000:8000"
 
@@ -18,13 +18,18 @@ services:
         tty: true
         volumes:
             - ./:/app
-        command: "php artisan serve --host=0.0.0.0 --port=8080"
+        environment:
+            COMPOSER_ALLOW_SUPERUSER: 1
+        command: bash -c "if [[ ! -d /app/vendor ]]; then
+               composer update;
+            fi;
+            php artisan serve --host=0.0.0.0 --port=8080"
         #command: "composer create-project laravel/laravel laravel-vue --prefer-dist"
         ports:
             - "8080:8080"
 
     mysql:
-        image: mysql:5.7.22
+        image: mariadb:10.5.8
         container_name: mysql
         restart: unless-stopped
         tty: true
